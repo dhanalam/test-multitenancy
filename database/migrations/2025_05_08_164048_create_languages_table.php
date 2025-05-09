@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('languages', function (Blueprint $table) {
             $table->id();
+            $table->string('country_id');
+            $table->foreign('country_id')->references('id')->on('countries')->cascadeOnDelete();
             $table->string('name', 250)->unique();
             $table->string('code', 2)->unique();
             $table->string('thumbnail')->nullable();
