@@ -12,7 +12,8 @@
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900">{{ $language->name }}</h3>
                         <p class="mt-1 text-sm text-gray-600">{{ __('Language Code') }}: {{ $language->code }}</p>
-                        
+                        <p class="mt-1 text-sm text-gray-600">{{ __('Country') }}: {{ $language->country->name ?? 'N/A' }}</p>
+
                         <div class="mt-4">
                             <p class="text-sm text-gray-600">
                                 {{ __('Default Language') }}: 
@@ -27,7 +28,7 @@
                                 @endif
                             </p>
                         </div>
-                        
+
                         @if ($language->thumbnail)
                             <div class="mt-4">
                                 <p class="text-sm text-gray-600 mb-2">{{ __('Thumbnail') }}:</p>

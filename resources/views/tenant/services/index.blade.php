@@ -1,7 +1,7 @@
-<x-admin-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Languages') }}
+            {{ __('Services') }}
         </h2>
     </x-slot>
 
@@ -22,8 +22,8 @@
                     @endif
 
                     <div class="flex justify-end mb-4">
-                        <a href="{{ route('admin.languages.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                            {{ __('Add Language') }}
+                        <a href="{{ route('tenant.services.create', ['tenant' => tenant('id')]) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            {{ __('Add Service') }}
                         </a>
                     </div>
 
@@ -32,19 +32,19 @@
                             <thead>
                                 <tr>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        {{ __('Type') }}
+                                    </th>
+                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {{ __('Name') }}
                                     </th>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Country') }}
+                                        {{ __('Active') }}
                                     </th>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Code') }}
+                                        {{ __('Order') }}
                                     </th>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Default') }}
-                                    </th>
-                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Thumbnail') }}
+                                        {{ __('Image') }}
                                     </th>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {{ __('Actions') }}
@@ -52,19 +52,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($languages as $language)
+                                @forelse ($services as $service)
                                     <tr>
                                         <td class="py-2 px-4 border-b border-gray-200">
-                                            {{ $language->name }}
+                                            {{ $service->type }}
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
-                                            {{ $language->country->name ?? 'N/A' }}
+                                            @if ($service->translations->isNotEmpty())
+                                                {{ $service->translations->first()->name }}
+                                            @else
+                                                <span class="text-gray-400">{{ __('No translation') }}</span>
+                                            @endif
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
-                                            {{ $language->code }}
-                                        </td>
-                                        <td class="py-2 px-4 border-b border-gray-200">
-                                            @if ($language->default)
+                                            @if ($service->is_active)
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                     {{ __('Yes') }}
                                                 </span>
@@ -75,21 +76,24 @@
                                             @endif
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
-                                            @if ($language->thumbnail)
-                                                <img src="{{ asset($language->thumbnail) }}" alt="{{ $language->name }}" class="h-8">
+                                            {{ $service->order_no }}
+                                        </td>
+                                        <td class="py-2 px-4 border-b border-gray-200">
+                                            @if ($service->image)
+                                                <img src="{{ asset($service->image) }}" alt="{{ $service->translations->first()->name ?? 'Service' }}" class="h-8">
                                             @else
-                                                <span class="text-gray-400">{{ __('No thumbnail') }}</span>
+                                                <span class="text-gray-400">{{ __('No image') }}</span>
                                             @endif
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('admin.languages.show', $language) }}" class="text-blue-500 hover:text-blue-700">
+                                                <a href="{{ route('tenant.services.show', ['tenant' => tenant('id'), 'service' => $service]) }}" class="text-blue-500 hover:text-blue-700">
                                                     {{ __('View') }}
                                                 </a>
-                                                <a href="{{ route('admin.languages.edit', $language) }}" class="text-yellow-500 hover:text-yellow-700">
+                                                <a href="{{ route('tenant.services.edit', ['tenant' => tenant('id'), 'service' => $service]) }}" class="text-yellow-500 hover:text-yellow-700">
                                                     {{ __('Edit') }}
                                                 </a>
-                                                <form action="{{ route('admin.languages.destroy', $language) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this language?');">
+                                                <form action="{{ route('tenant.services.destroy', ['tenant' => tenant('id'), 'service' => $service]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this service?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-500 hover:text-red-700">
@@ -101,8 +105,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="py-2 px-4 border-b border-gray-200 text-center">
-                                            {{ __('No languages found.') }}
+                                        <td colspan="6" class="py-2 px-4 border-b border-gray-200 text-center">
+                                            {{ __('No services found.') }}
                                         </td>
                                     </tr>
                                 @endforelse
@@ -113,4 +117,4 @@
             </div>
         </div>
     </div>
-</x-admin-layout>
+</x-app-layout>

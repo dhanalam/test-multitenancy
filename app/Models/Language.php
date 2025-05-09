@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Language extends Model
@@ -18,6 +19,7 @@ class Language extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'country_id',
         'name',
         'code',
         'thumbnail',
@@ -32,6 +34,14 @@ class Language extends Model
     protected $casts = [
         'default' => 'boolean',
     ];
+
+    /**
+     * Get the country that owns the language.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
 
     /**
      * Get the service translations for the language.

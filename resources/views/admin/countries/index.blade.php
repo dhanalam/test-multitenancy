@@ -1,4 +1,4 @@
-<x-admin-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Countries') }}
@@ -16,7 +16,10 @@
                     @endif
 
                     <div class="flex justify-end mb-4">
-                        <a href="{{ route('admin.countries.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        <a href="{{ route('admin.countries.create') }}" class="flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
                             {{ __('Add Country') }}
                         </a>
                     </div>
@@ -77,4 +80,4 @@
             </div>
         </div>
     </div>
-</x-admin-app-layout>
+</x-admin-layout>

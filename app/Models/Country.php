@@ -21,7 +21,6 @@ class Country extends BaseTenant implements TenantWithDatabase
     {
         return [
             'name',
-            'code',
             'id',
         ];
     }

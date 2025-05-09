@@ -12,6 +12,20 @@
                     <form method="POST" action="{{ route('admin.languages.store') }}" enctype="multipart/form-data">
                         @csrf
 
+                        <!-- Country -->
+                        <div class="mb-4">
+                            <x-input-label for="country_id" :value="__('Country')" />
+                            <select id="country_id" name="country_id" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">{{ __('Select a country') }}</option>
+                                @foreach ($countries as $country)
+                                    <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
+                                        {{ $country->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('country_id')" class="mt-2" />
+                        </div>
+
                         <!-- Name -->
                         <div class="mb-4">
                             <x-input-label for="name" :value="__('Name')" />

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\CreateCountryAction;
+use App\Actions\Admin\DeleteCountryAction;
+use App\Actions\Admin\UpdateCountryAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreCountryRequest;
+use App\Http\Requests\Admin\UpdateCountryRequest;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CountryController extends Controller
@@ -32,14 +36,9 @@ class CountryController extends Controller
     /**
      * Store a newly created country in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreCountryRequest $request, CreateCountryAction $action): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:2|unique:countries,code',
-        ]);
-
-        Country::create($validated);
+        $action->handle($request->validated());
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country created successfully.');
@@ -64,14 +63,9 @@ class CountryController extends Controller
     /**
      * Update the specified country in storage.
      */
-    public function update(Request $request, Country $country): RedirectResponse
+    public function update(UpdateCountryRequest $request, Country $country, UpdateCountryAction $action): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:2|unique:countries,code,' . $country->id,
-        ]);
-
-        $country->update($validated);
+        $action->handle($country, $request->validated());
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country updated successfully.');
@@ -80,9 +74,9 @@ class CountryController extends Controller
     /**
      * Remove the specified country from storage.
      */
-    public function destroy(Country $country): RedirectResponse
+    public function destroy(Country $country, DeleteCountryAction $action): RedirectResponse
     {
-        $country->delete();
+        $action->handle($country);
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country deleted successfully.');
