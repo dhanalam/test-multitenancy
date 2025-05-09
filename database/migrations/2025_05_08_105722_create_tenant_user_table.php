@@ -20,8 +20,8 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::table('users', function (Blueprint $table) {
-            $table->string('tenant_id');
-            $table->foreign('tenant_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('tenant_id')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('countries')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

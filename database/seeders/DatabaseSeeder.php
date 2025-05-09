@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\Country;
 use App\Models\Domain;
 use App\Models\User;
@@ -21,24 +22,31 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Domain::truncate();*/
 
-        DB::enableQueryLog();
-        $tenant = Country::create([
-            'id' => 'de',
-            'name' => 'Germany',
-            'data' => [],
-        ]);
+        DB::transaction(function () {
+            $admin = User::factory()->create([
+                'name' => 'Admin',
+                'email' => 'admin@listandsell.de',
+                'role' => UserRole::Admin->value,
+            ]);
 
-        $user = User::factory()->create([
-            'name' => 'Dhan Kumar Lama',
-            'email' => 'admin@listandsell.de',
-            'tenant_id' => $tenant->id,
-        ]);
+            $tenant = Country::create([
+                'id' => 'de',
+                'name' => 'Germany',
+                'data' => [],
+            ]);
 
-        $user->tenants()->attach($tenant->id);
+            $user = User::factory()->create([
+                'name' => 'Dhan Kumar Lama',
+                'email' => 'dhana@listandsell.de',
+                'tenant_id' => $tenant->id,
+                'role' => UserRole::User->value,
+            ]);
 
-        foreach (config('tenancy.central_domains') as $domain) {
-            $tenant->domains()->create(['domain' => 'test.' . $domain]);
-        }
+            $user->tenants()->attach($tenant->id);
 
+            foreach (config('tenancy.central_domains') as $domain) {
+                $tenant->domains()->create(['domain' => 'test.' . $domain]);
+            }
+        });
     }
 }

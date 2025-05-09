@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,6 +19,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
  * @property int $id The unique identifier for the user
  * @property string $name The user's full name
  * @property string $email The user's email address
+ * @property string $role The user's role
  * @property \Illuminate\Support\Carbon|null $email_verified_at When the email was verified
  * @property string $password The hashed user password
  * @property string|null $remember_token Authentication remember token
@@ -48,6 +50,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -62,7 +65,7 @@ class User extends Authenticatable
 
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Country::class, 'tenant_user');
+        return $this->belongsToMany(Country::class, 'tenant_user', 'user_id', 'tenant_id');
     }
 
     /**
@@ -76,5 +79,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin->value;
     }
 }

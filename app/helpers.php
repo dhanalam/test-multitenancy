@@ -8,5 +8,5 @@ function getTenantId(): ?string
         return (string) tenant('id');
     }
 
-    return auth()->check() ? (string) auth()->user()->tenant_id : null;
+    return auth()->check() ? auth()->user()->tenant_id : null;
 }
