@@ -5,8 +5,8 @@ declare(strict_types=1);
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
-use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +20,12 @@ use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 |
 */
 
-
 Route::middleware([
     'web',
     'auth',
     InitializeTenancyByPath::class,
-    //InitializeTenancyByDomain::class,
-    //PreventAccessFromCentralDomains::class,
+    // InitializeTenancyByDomain::class,
+    // PreventAccessFromCentralDomains::class,
 ])
     ->prefix('/{tenant}')
     ->group(function () {

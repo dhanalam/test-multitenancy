@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,11 @@ class CreateTenantsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenants', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('countries', function (Blueprint $table) {
+            $table->string('id', 2)->primary();
+            $table->string('name', 250)->unique();
             $table->json('data')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateTenantsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenants');
+        Schema::dropIfExists('countries');
     }
-}
+};

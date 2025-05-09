@@ -1,10 +1,12 @@
 <?php
 
-function getTenantId(): ?int
+declare(strict_types=1);
+
+function getTenantId(): ?string
 {
     if (tenant()) {
-        return (int) tenant('id');
+        return (string) tenant('id');
     }
 
-    return auth()->check() ? (int) auth()->user()->tenant_id : null;
+    return auth()->check() ? (string) auth()->user()->tenant_id : null;
 }

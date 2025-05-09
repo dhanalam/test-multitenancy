@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use App\Models\Tenant;
+use App\Models\Country;
+use App\Models\Domain;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Stancl\Tenancy\Database\Models\Domain;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,25 +17,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        /*User::truncate();
-        Tenant::truncate();*/
+        /*Tenant::truncate();
+        User::truncate();
+        Domain::truncate();*/
 
-        $tenant = Tenant::create([
-            'data' => [
-                'name' => 'Nepal',
-                'code' => 'NP',
-                'currency' => 'NPR',
-                'timezone' => 'Asia/Kathmandu',
-            ],
+        DB::enableQueryLog();
+        $tenant = Country::create([
+            'id' => 'de',
+            'name' => 'Germany',
+            'data' => [],
         ]);
-        User::factory()->create([
+
+        $user = User::factory()->create([
             'name' => 'Dhan Kumar Lama',
             'email' => 'admin@listandsell.de',
             'tenant_id' => $tenant->id,
         ]);
 
+        $user->tenants()->attach($tenant->id);
+
         foreach (config('tenancy.central_domains') as $domain) {
-            $tenant->domains()->create(['domain' => 'test.'.$domain]);
+            $tenant->domains()->create(['domain' => 'test.' . $domain]);
         }
 
     }

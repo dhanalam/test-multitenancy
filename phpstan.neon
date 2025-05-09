@@ -1,0 +1,16 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    #checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
+
+    level: 8
+
+    paths:
+        - app
+        - bootstrap
+        - routes
+        - database
