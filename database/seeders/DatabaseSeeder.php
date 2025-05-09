@@ -22,6 +22,12 @@ class DatabaseSeeder extends Seeder
         User::truncate();
         Domain::truncate();*/
 
+        // Seed countries
+        $this->call(CountrySeeder::class);
+
+        // Seed languages
+        $this->call(LanguageSeeder::class);
+
         DB::transaction(function () {
             $admin = User::factory()->create([
                 'name' => 'Admin',
@@ -29,11 +35,7 @@ class DatabaseSeeder extends Seeder
                 'role' => UserRole::Admin->value,
             ]);
 
-            $tenant = Country::create([
-                'id' => 'de',
-                'name' => 'Germany',
-                'data' => [],
-            ]);
+            $tenant = Country::firstWhere('id', 'de');
 
             $user = User::factory()->create([
                 'name' => 'Dhan Kumar Lama',

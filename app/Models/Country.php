@@ -17,6 +17,10 @@ class Country extends BaseTenant implements TenantWithDatabase
 
     protected $primaryKey = 'id';
 
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     public static function getCustomColumns(): array
     {
         return [

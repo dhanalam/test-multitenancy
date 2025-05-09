@@ -17,8 +17,8 @@ class CreateCountryAction
     public function handle(array $data): Country
     {
         return Country::create([
+            'id' => $data['code'],
             'name' => $data['name'],
-            'code' => $data['code'],
         ]);
     }
 }

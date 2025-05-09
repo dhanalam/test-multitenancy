@@ -19,7 +19,6 @@ class UpdateCountryAction
     {
         $country->update([
             'name' => $data['name'],
-            'code' => $data['code'],
         ]);
 
         return $country;

@@ -25,7 +25,6 @@ class UpdateCountryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:2|unique:countries,code,' . $this->route('country')->id,
         ];
     }
 }

@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900">{{ $country->name }}</h3>
-                        <p class="mt-1 text-sm text-gray-600">{{ __('Country Code') }}: {{ $country->code }}</p>
+                        <p class="mt-1 text-sm text-gray-600">{{ __('ID') }}: {{ $country->id }}</p>
                     </div>
 
                     <div class="flex space-x-4">

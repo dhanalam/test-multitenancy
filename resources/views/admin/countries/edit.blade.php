@@ -20,11 +20,11 @@
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
-                        <!-- Code -->
+                        <!-- ID (read-only) -->
                         <div class="mb-4">
-                            <x-input-label for="code" :value="__('Code (2 characters)')" />
-                            <x-text-input id="code" class="block mt-1 w-full" type="text" name="code" :value="old('code', $country->code)" required maxlength="2" />
-                            <x-input-error :messages="$errors->get('code')" class="mt-2" />
+                            <x-input-label for="id" :value="__('ID')" />
+                            <x-text-input id="id" class="block mt-1 w-full bg-gray-100" type="text" :value="$country->id" readonly disabled />
+                            <p class="mt-1 text-sm text-gray-500">{{ __('ID cannot be changed after creation.') }}</p>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

@@ -19,10 +19,11 @@
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
-                        <!-- Code -->
+                        <!-- ID -->
                         <div class="mb-4">
-                            <x-input-label for="code" :value="__('Code (2 characters)')" />
+                            <x-input-label for="code" :value="__('ID (2 characters)')" />
                             <x-text-input id="code" class="block mt-1 w-full" type="text" name="code" :value="old('code')" required maxlength="2" />
+                            <p class="mt-1 text-sm text-gray-500">{{ __('This will be used as the country ID and cannot be changed after creation.') }}</p>
                             <x-input-error :messages="$errors->get('code')" class="mt-2" />
                         </div>
 
