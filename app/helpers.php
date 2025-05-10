@@ -21,7 +21,7 @@ function getTenantId(): ?string
  */
 function getAuthTenantIds(): array
 {
-    if (!auth()->check()) {
+    if (! auth()->check()) {
         return [];
     }
 
@@ -42,9 +42,7 @@ function getLanguagesByTenant(): Collection
     return getAllLanguages()->where('country_id', getTenantId());
 }
 
-
 function getAllLanguages(): Collection
 {
     return Language::all();
 }
-

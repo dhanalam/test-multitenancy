@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Requests\Tenant;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UpdateServiceRequest extends FormRequest

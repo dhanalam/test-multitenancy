@@ -12,6 +12,7 @@ use App\Http\Requests\Admin\StoreLanguageRequest;
 use App\Http\Requests\Admin\UpdateLanguageRequest;
 use App\Models\Country;
 use App\Models\Language;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -81,7 +82,7 @@ class LanguageController extends Controller
 
     /**
      * Remove the specified language from storage.
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Language $language, DeleteLanguage $deleteLanguage): RedirectResponse
     {

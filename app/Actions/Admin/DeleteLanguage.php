@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Language;
+use Exception;
 
-class DeleteLanguage
+readonly class DeleteLanguage
 {
+    public function __construct(private MakeDefaultLanguage $makeDefaultLanguage) {}
+
     /**
      * Delete a language.
      *
      * @param Language $language
-     * @return bool|string Returns true if successful, or an error message if not
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
-    public function handle(Language $language): bool|string
+    public function handle(Language $language): void
     {
         // Don't allow deleting the default language if it's the only one
         if ($language->default && Language::count() === 1) {
-            throw new \Exception('Cannot delete the only language.');
+            throw new Exception('Cannot delete the only language.');
         }
 
         // If deleting the default language, make another one default
         if ($language->default) {
-            $newDefault = Language::where('id', '!=', $language->id)->first();
-            if ($newDefault) {
-                $newDefault->update(['default' => true]);
-            }
+            $this->makeDefaultLanguage->handle(null, [$language->id]);
         }
 
         // Delete thumbnail if exists

@@ -7,8 +7,10 @@ namespace App\Actions\Admin;
 use App\Models\Language;
 use Illuminate\Http\UploadedFile;
 
-class CreateLanguage
+final readonly class CreateLanguage
 {
+    public function __construct(private RemoveDefaultLanguage $removeDefaultLanguage) {}
+
     /**
      * Create a new language.
      *
@@ -18,29 +20,33 @@ class CreateLanguage
      */
     public function handle(array $data, ?UploadedFile $thumbnail = null): Language
     {
+        $default = $data['default'] ?? false;
+
         $languageData = [
             'country_id' => $data['country_id'],
             'name' => $data['name'],
             'code' => $data['code'],
-            'default' => $data['default'] ?? false,
+            'default' => $default,
         ];
 
         // Handle thumbnail upload
         if ($thumbnail) {
-            $filename = time() . '_' . $thumbnail->getClientOriginalName();
-            $thumbnail->move(public_path('uploads/languages'), $filename);
-            $languageData['thumbnail'] = 'uploads/languages/' . $filename;
+            $languageData['thumbnail'] = $this->storeThumbnail($thumbnail);
         }
 
-        // If this is the first language or default is checked, make it default
-        if (Language::count() === 0 || ($data['default'] ?? false)) {
-            // If default is checked, unset default for all other languages
-            if ($data['default'] ?? false) {
-                Language::where('default', true)->update(['default' => false]);
-            }
-            $languageData['default'] = true;
+        // if has default, remove previous default language
+        if ($default) {
+            $this->removeDefaultLanguage->handle();
         }
 
         return Language::create($languageData);
+    }
+
+    private function storeThumbnail(UploadedFile $thumbnail): string
+    {
+        $filename = time() . '_' . $thumbnail->getClientOriginalName();
+        $thumbnail->move(public_path('uploads/languages'), $filename);
+
+        return 'uploads/languages/' . $filename;
     }
 }

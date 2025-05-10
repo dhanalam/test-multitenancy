@@ -7,8 +7,10 @@ namespace App\Actions\Admin;
 use App\Models\Language;
 use Illuminate\Http\UploadedFile;
 
-class UpdateLanguage
+readonly class UpdateLanguage
 {
+    public function __construct(private RemoveDefaultLanguage $removeDefaultLanguage) {}
+
     /**
      * Update an existing language.
      *
@@ -19,41 +21,39 @@ class UpdateLanguage
      */
     public function handle(Language $language, array $data, ?UploadedFile $thumbnail = null): Language
     {
+        $default = $data['default'] ?? false;
+
         $languageData = [
             'country_id' => $data['country_id'],
             'name' => $data['name'],
             'code' => $data['code'],
-            'default' => $data['default'] ?? false,
+            'default' => $default,
         ];
 
         // Handle thumbnail upload
         if ($thumbnail) {
-            // Delete old thumbnail if exists
-            if ($language->thumbnail && file_exists(public_path($language->thumbnail))) {
-                unlink(public_path($language->thumbnail));
-            }
-
-            $filename = time() . '_' . $thumbnail->getClientOriginalName();
-            $thumbnail->move(public_path('uploads/languages'), $filename);
-            $languageData['thumbnail'] = 'uploads/languages/' . $filename;
+            $languageData['thumbnail'] = $this->updateThumbnail($language, $thumbnail);
         }
 
         // Handle default language
-        if (($data['default'] ?? false)) {
-            // Unset default for all other languages
-            Language::where('id', '!=', $language->id)
-                ->where('default', true)
-                ->update(['default' => false]);
-            $languageData['default'] = true;
-        } elseif ($language->default && ! ($data['default'] ?? false)) {
-            // Don't allow unsetting default if this is the only language or the only default
-            if (Language::count() === 1 || Language::where('default', true)->count() === 1) {
-                $languageData['default'] = true;
-            }
+        if ($default) {
+            $this->removeDefaultLanguage->handle();
         }
 
         $language->update($languageData);
 
         return $language;
+    }
+
+    private function updateThumbnail(Language $language, UploadedFile $thumbnail): string
+    {
+        if ($language->thumbnail && file_exists(public_path($language->thumbnail))) {
+            unlink(public_path($language->thumbnail));
+        }
+
+        $filename = time() . '_' . $thumbnail->getClientOriginalName();
+        $thumbnail->move(public_path('uploads/languages'), $filename);
+
+        return 'uploads/languages/' . $filename;
     }
 }

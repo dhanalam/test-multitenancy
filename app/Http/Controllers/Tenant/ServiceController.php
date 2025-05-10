@@ -12,6 +12,7 @@ use App\Http\Requests\Tenant\StoreServiceRequest;
 use App\Http\Requests\Tenant\UpdateServiceRequest;
 use App\Models\Language;
 use App\Models\Service;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,7 +41,7 @@ class ServiceController extends Controller
 
     /**
      * Store a newly created service in storage.
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(StoreServiceRequest $request, CreateService $createService): RedirectResponse
     {
@@ -74,7 +75,7 @@ class ServiceController extends Controller
 
     /**
      * Update the specified service in storage.
-     * @throws \Exception
+     * @throws Exception
      */
     public function update(UpdateServiceRequest $request, Service $service, UpdateService $updateService): RedirectResponse
     {
@@ -86,7 +87,7 @@ class ServiceController extends Controller
 
     /**
      * Remove the specified service from storage.
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Request $request, Service $service, DeleteService $deleteService): RedirectResponse
     {
@@ -97,5 +98,4 @@ class ServiceController extends Controller
         return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
             ->with('success', 'Service deleted successfully.');
     }
-
 }
