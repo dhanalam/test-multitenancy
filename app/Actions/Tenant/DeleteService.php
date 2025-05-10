@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Tenant;
 
 use App\Models\Service;
-use Exception;
-use Illuminate\Support\Facades\DB;
 
 final class DeleteService
 {
@@ -14,22 +12,15 @@ final class DeleteService
      * Delete a service.
      *
      * @param Service $service
-     * @return bool
-     * @throws Exception
+     * @return void
      */
-    public function handle(Service $service): bool
+    public function handle(Service $service): void
     {
-        try {
-            // Delete image if exists
-            if ($service->image && file_exists(public_path($service->image))) {
-                unlink(public_path($service->image));
-            }
-
-            $service->delete();
-
-            return true;
-        } catch (Exception $e) {
-            throw $e;
+        // Delete image if exists
+        if ($service->image && file_exists(public_path($service->image))) {
+            unlink(public_path($service->image));
         }
+
+        $service->delete();
     }
 }
