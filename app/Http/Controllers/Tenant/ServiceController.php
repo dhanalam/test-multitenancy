@@ -25,10 +25,7 @@ class ServiceController extends Controller
      */
     public function index(): View
     {
-        DB::enableQueryLog();
-        // where('tenant_id', tenant('id'))->
         $services = Service::get();
-        dd(DB::getQueryLog());
 
         return view('tenant.services.index', compact('services'));
     }
