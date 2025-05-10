@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Language;
+use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 
-readonly class UpdateLanguage
+final readonly class UpdateLanguage
 {
     public function __construct(private RemoveDefaultLanguage $removeDefaultLanguage) {}
 
@@ -19,6 +19,7 @@ readonly class UpdateLanguage
      * @param array<string, mixed> $data
      * @param UploadedFile|null $thumbnail
      * @return Language
+     * @throws Exception
      */
     public function handle(Language $language, array $data, ?UploadedFile $thumbnail = null): Language
     {
@@ -36,16 +37,17 @@ readonly class UpdateLanguage
             $languageData['thumbnail'] = $this->updateThumbnail($language, $thumbnail);
         }
 
-        return DB::transaction(function () use ($language, $languageData, $default) {
+        dbTransaction(function () use ($default, $language, $languageData) {
+
             // Handle default language
             if ($default) {
-                $this->removeDefaultLanguage->handle();
+                $this->removeDefaultLanguage->handle($language->country_id);
             }
 
             $language->update($languageData);
-
-            return $language;
         });
+
+        return $language;
     }
 
     private function updateThumbnail(Language $language, UploadedFile $thumbnail): string

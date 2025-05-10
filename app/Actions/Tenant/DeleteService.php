@@ -21,6 +21,8 @@ final class DeleteService
             unlink(public_path($service->image));
         }
 
-        $service->delete();
+        dbTransaction(function () use ($service) {
+            $service->delete();
+        });
     }
 }

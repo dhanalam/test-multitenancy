@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\MessageBag;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -11,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
         then: function () {
-            //$domain = config('tenancy.central_domains')[0];
+            // $domain = config('tenancy.central_domains')[0];
             Route::middleware([])
                 ->group(base_path('routes/tenant.php'));
         },
@@ -22,21 +25,21 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
 
-        $exceptions->renderable(function (\Exception $e) {
+        $exceptions->renderable(function (Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ], 500);
             }
 
-            return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
         });
 
-        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e) {
+        $exceptions->renderable(function (Illuminate\Validation\ValidationException $e) {
             if (request()->expectsJson()) {
                 return response()->json([
                     'message' => 'Validation error',
-                    'errors' => $e->validator->getMessageBag()
+                    'errors' => $e->validator->getMessageBag(),
                 ], 422);
             }
 

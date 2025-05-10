@@ -8,7 +8,6 @@ use App\Models\Service;
 use App\Models\ServiceTranslation;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 final class UpdateService
@@ -19,10 +18,10 @@ final class UpdateService
      * @param Service $service
      * @param array<string, mixed> $data
      * @param UploadedFile|null $image
-     * @return Service
+     * @return void
      * @throws Exception
      */
-    public function handle(Service $service, array $data, ?UploadedFile $image = null): Service
+    public function handle(Service $service, array $data, ?UploadedFile $image = null): void
     {
         $serviceData = [
             'type' => $data['type'],
@@ -42,7 +41,7 @@ final class UpdateService
             $serviceData['image'] = 'uploads/services/' . $filename;
         }
 
-        return DB::transaction(function () use ($service, $serviceData, $data) {
+        dbTransaction(function () use ($service, $serviceData, $data) {
             // Update service
             $service->update($serviceData);
 
@@ -60,8 +59,6 @@ final class UpdateService
                     ]
                 );
             }
-
-            return $service;
         });
     }
 }

@@ -23,14 +23,6 @@ class CountrySeeder extends Seeder
                 'id' => 'np',
                 'name' => 'Nepal',
             ],
-            [
-                'id' => 'in',
-                'name' => 'India',
-            ],
-            [
-                'id' => 'en',
-                'name' => 'America',
-            ],
         ];
 
         foreach ($countries as $country) {

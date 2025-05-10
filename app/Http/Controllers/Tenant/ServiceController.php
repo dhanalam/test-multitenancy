@@ -15,6 +15,7 @@ use App\Models\Service;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ServiceController extends Controller
@@ -24,7 +25,10 @@ class ServiceController extends Controller
      */
     public function index(): View
     {
-        $services = Service::where('tenant_id', tenant('id'))->get();
+        DB::enableQueryLog();
+        // where('tenant_id', tenant('id'))->
+        $services = Service::get();
+        dd(DB::getQueryLog());
 
         return view('tenant.services.index', compact('services'));
     }

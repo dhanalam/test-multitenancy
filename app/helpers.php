@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 function getTenantId(): ?string
 {
@@ -45,4 +46,25 @@ function getLanguagesByTenant(): Collection
 function getAllLanguages(): Collection
 {
     return Language::all();
+}
+
+/**
+ * Execute database action inside transaction.
+ *
+ * @param callable $callback
+ * @return void
+ * @throws Exception
+ */
+function dbTransaction(callable $callback): void
+{
+    DB::beginTransaction();
+
+    try {
+        $callback();
+        DB::commit();
+    } catch (Exception $e) {
+        DB::rollback();
+
+        throw $e;
+    }
 }

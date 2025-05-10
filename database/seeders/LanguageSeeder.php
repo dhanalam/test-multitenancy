@@ -26,13 +26,7 @@ class LanguageSeeder extends Seeder
                 'country_id' => 'de',
                 'name' => 'German',
                 'code' => 'de',
-                'default' => true, // Default language for Germany
-            ],
-            [
-                'country_id' => 'de',
-                'name' => 'Russian',
-                'code' => 'ru',
-                'default' => false,
+                'default' => true,
             ],
 
             // Nepal languages

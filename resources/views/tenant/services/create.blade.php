@@ -12,6 +12,18 @@
                     <form method="POST" action="{{ route('tenant.services.store', ['tenant' => tenant('id')]) }}" enctype="multipart/form-data">
                         @csrf
 
+                        <!-- Display validation errors -->
+                        @if ($errors->any())
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md">
+                                <p class="font-medium">{{ __('Please fix the following errors:') }}</p>
+                                <ul class="mt-2 list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <!-- Type -->
                         <div class="mb-4">
                             <x-input-label for="type" :value="__('Type')" />

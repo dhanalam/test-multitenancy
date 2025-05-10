@@ -8,7 +8,6 @@ use App\Models\Service;
 use App\Models\ServiceTranslation;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 final class CreateService
@@ -19,10 +18,9 @@ final class CreateService
      * @param string $tenantId
      * @param array<string, mixed> $data
      * @param UploadedFile|null $image
-     * @return Service
      * @throws Exception
      */
-    public function handle(string $tenantId, array $data, ?UploadedFile $image = null): Service
+    public function handle(string $tenantId, array $data, ?UploadedFile $image = null): void
     {
         $serviceData = [
             'tenant_id' => $tenantId,
@@ -38,7 +36,7 @@ final class CreateService
             $serviceData['image'] = 'uploads/services/' . $filename;
         }
 
-        return DB::transaction(function () use ($serviceData, $data) {
+        dbTransaction(function () use ($serviceData, $data) {
             // Create service
             $service = Service::create($serviceData);
 
@@ -52,8 +50,6 @@ final class CreateService
                     'description' => $translation['description'] ?? null,
                 ]);
             }
-
-            return $service;
         });
     }
 }

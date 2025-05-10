@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Country;
-use Illuminate\Support\Facades\DB;
 
 final class DeleteCountry
 {
@@ -17,7 +16,7 @@ final class DeleteCountry
      */
     public function handle(Country $country): void
     {
-        DB::transaction(function () use ($country) {
+        dbTransaction(function () use ($country) {
             $country->delete();
         });
     }

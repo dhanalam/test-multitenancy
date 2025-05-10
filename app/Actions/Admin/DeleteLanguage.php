@@ -6,9 +6,8 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 use Exception;
-use Illuminate\Support\Facades\DB;
 
-readonly class DeleteLanguage
+final readonly class DeleteLanguage
 {
     public function __construct(private MakeDefaultLanguage $makeDefaultLanguage) {}
 
@@ -28,10 +27,12 @@ readonly class DeleteLanguage
 
         $thumbnailPath = $this->getThumbnailPath($language);
 
-        DB::transaction(function () use ($language) {
+        $makeDefaultLanguage = $this->makeDefaultLanguage;
+
+        dbTransaction(function () use ($language, $makeDefaultLanguage) {
             // If deleting the default language, make another one default
             if ($language->default) {
-                $this->makeDefaultLanguage->handle(null, [$language->id]);
+                $makeDefaultLanguage->handle(null, [$language->id]);
             }
 
             $language->delete();
