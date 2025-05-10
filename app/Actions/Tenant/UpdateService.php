@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class UpdateService
+final class UpdateService
 {
     /**
      * Update an existing service.

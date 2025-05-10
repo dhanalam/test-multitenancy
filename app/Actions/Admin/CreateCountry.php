@@ -6,7 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Country;
 
-class CreateCountry
+final class CreateCountry
 {
     /**
      * Create a new country.

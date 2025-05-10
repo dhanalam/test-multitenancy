@@ -6,7 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 
-class RemoveDefaultLanguage
+final class RemoveDefaultLanguage
 {
     /**
      * Remove current default Language.

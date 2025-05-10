@@ -6,7 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Country;
 
-class UpdateCountry
+final class UpdateCountry
 {
     /**
      * Update an existing country.
