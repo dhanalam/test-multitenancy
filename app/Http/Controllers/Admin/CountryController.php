@@ -37,9 +37,9 @@ class CountryController extends Controller
     /**
      * Store a newly created country in storage.
      */
-    public function store(StoreCountryRequest $request, CreateCountryAction $action): RedirectResponse
+    public function store(StoreCountryRequest $request, CreateCountryAction $createCountryAction): RedirectResponse
     {
-        $action->handle($request->validated());
+        $createCountryAction->handle($request->validated());
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country created successfully.');
@@ -64,9 +64,9 @@ class CountryController extends Controller
     /**
      * Update the specified country in storage.
      */
-    public function update(UpdateCountryRequest $request, Country $country, UpdateCountryAction $action): RedirectResponse
+    public function update(UpdateCountryRequest $request, Country $country, UpdateCountryAction $updateCountryAction): RedirectResponse
     {
-        $action->handle($country, $request->validated());
+        $updateCountryAction->handle($country, $request->validated());
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country updated successfully.');
@@ -75,9 +75,9 @@ class CountryController extends Controller
     /**
      * Remove the specified country from storage.
      */
-    public function destroy(Country $country, DeleteCountryAction $action): RedirectResponse
+    public function destroy(Country $country, DeleteCountryAction $deleteCountryAction): RedirectResponse
     {
-        $action->handle($country);
+        $deleteCountryAction->handle($country);
 
         return redirect()->route('admin.countries.index')
             ->with('success', 'Country deleted successfully.');
