@@ -24,23 +24,21 @@ final class CreateService
      */
     public function handle(string $tenantId, array $data, ?UploadedFile $image = null): Service
     {
-        try {
-            DB::beginTransaction();
+        $serviceData = [
+            'tenant_id' => $tenantId,
+            'type' => $data['type'],
+            'is_active' => $data['is_active'] ?? true,
+            'order_no' => $data['order_no'] ?? 0,
+        ];
 
-            $serviceData = [
-                'tenant_id' => $tenantId,
-                'type' => $data['type'],
-                'is_active' => $data['is_active'] ?? true,
-                'order_no' => $data['order_no'] ?? 0,
-            ];
+        // Handle image upload (outside transaction)
+        if ($image) {
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/services'), $filename);
+            $serviceData['image'] = 'uploads/services/' . $filename;
+        }
 
-            // Handle image upload
-            if ($image) {
-                $filename = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('uploads/services'), $filename);
-                $serviceData['image'] = 'uploads/services/' . $filename;
-            }
-
+        return DB::transaction(function () use ($serviceData, $data) {
             // Create service
             $service = Service::create($serviceData);
 
@@ -55,13 +53,7 @@ final class CreateService
                 ]);
             }
 
-            DB::commit();
-
             return $service;
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            throw $e;
-        }
+        });
     }
 }

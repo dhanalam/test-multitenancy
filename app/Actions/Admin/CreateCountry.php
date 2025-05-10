@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Country;
+use Illuminate\Support\Facades\DB;
 
 final class CreateCountry
 {
@@ -16,9 +17,11 @@ final class CreateCountry
      */
     public function handle(array $data): Country
     {
-        return Country::create([
-            'id' => $data['code'],
-            'name' => $data['name'],
-        ]);
+        return DB::transaction(function () use ($data) {
+            return Country::create([
+                'id' => $data['code'],
+                'name' => $data['name'],
+            ]);
+        });
     }
 }

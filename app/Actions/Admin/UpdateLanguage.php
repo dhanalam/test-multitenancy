@@ -6,6 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 readonly class UpdateLanguage
 {
@@ -30,19 +31,21 @@ readonly class UpdateLanguage
             'default' => $default,
         ];
 
-        // Handle thumbnail upload
+        // Handle thumbnail upload (outside transaction)
         if ($thumbnail) {
             $languageData['thumbnail'] = $this->updateThumbnail($language, $thumbnail);
         }
 
-        // Handle default language
-        if ($default) {
-            $this->removeDefaultLanguage->handle();
-        }
+        return DB::transaction(function () use ($language, $languageData, $default) {
+            // Handle default language
+            if ($default) {
+                $this->removeDefaultLanguage->handle();
+            }
 
-        $language->update($languageData);
+            $language->update($languageData);
 
-        return $language;
+            return $language;
+        });
     }
 
     private function updateThumbnail(Language $language, UploadedFile $thumbnail): string

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Country;
+use Illuminate\Support\Facades\DB;
 
 final class UpdateCountry
 {
@@ -17,10 +18,12 @@ final class UpdateCountry
      */
     public function handle(Country $country, array $data): Country
     {
-        $country->update([
-            'name' => $data['name'],
-        ]);
+        return DB::transaction(function () use ($country, $data) {
+            $country->update([
+                'name' => $data['name'],
+            ]);
 
-        return $country;
+            return $country;
+        });
     }
 }

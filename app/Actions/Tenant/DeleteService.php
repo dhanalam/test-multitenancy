@@ -6,6 +6,7 @@ namespace App\Actions\Tenant;
 
 use App\Models\Service;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 final class DeleteService
 {

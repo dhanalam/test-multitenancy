@@ -6,6 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 readonly class DeleteLanguage
 {
@@ -25,16 +26,32 @@ readonly class DeleteLanguage
             throw new Exception('Cannot delete the only language.');
         }
 
-        // If deleting the default language, make another one default
-        if ($language->default) {
-            $this->makeDefaultLanguage->handle(null, [$language->id]);
-        }
+        $thumbnailPath = $this->getThumbnailPath($language);
+
+        DB::transaction(function () use ($language) {
+            // If deleting the default language, make another one default
+            if ($language->default) {
+                $this->makeDefaultLanguage->handle(null, [$language->id]);
+            }
+
+            $language->delete();
+        });
 
         // Delete thumbnail if exists
-        if ($language->thumbnail && file_exists(public_path($language->thumbnail))) {
-            unlink(public_path($language->thumbnail));
+        if ($thumbnailPath) {
+            $this->deleteThumbnail($thumbnailPath);
         }
+    }
 
-        $language->delete();
+    private function getThumbnailPath(Language $language): ?string
+    {
+        return $language->thumbnail && file_exists(public_path($language->thumbnail))
+            ? public_path($language->thumbnail)
+            : null;
+    }
+
+    private function deleteThumbnail(string $thumbnailPath): void
+    {
+        unlink($thumbnailPath);
     }
 }

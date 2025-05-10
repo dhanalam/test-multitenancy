@@ -6,6 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 final readonly class CreateLanguage
 {
@@ -34,12 +35,14 @@ final readonly class CreateLanguage
             $languageData['thumbnail'] = $this->storeThumbnail($thumbnail);
         }
 
-        // if has default, remove previous default language
-        if ($default) {
-            $this->removeDefaultLanguage->handle();
-        }
+        return DB::transaction(function () use ($default, $languageData, $this) {
+            // if has default, remove previous default language
+            if ($default) {
+                $this->removeDefaultLanguage->handle();
+            }
 
-        return Language::create($languageData);
+            return Language::create($languageData);
+        });
     }
 
     private function storeThumbnail(UploadedFile $thumbnail): string
