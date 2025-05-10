@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $redirectTo = route('admin.dashboard');
         if (getTenantId()) {
-            $redirectTo = route('dashboard', ['tenant' => getTenantId()]);
+            $redirectTo = route('tenant.dashboard', ['tenant' => getTenantId()]);
         }
 
         return redirect()->intended($redirectTo);

@@ -14,6 +14,20 @@ function getTenantId(): ?string
     return auth()->check() ? auth()->user()->tenant_id : null;
 }
 
+/**
+ * Get the tenant IDs from the authenticated user.
+ *
+ * @return array<int, int>
+ */
+function getAuthTenantIds(): array
+{
+    if (!auth()->check()) {
+        return [];
+    }
+
+    return auth()->tenants()->pluck('id')->toArray();
+}
+
 function getLanguageIdsByTenant(): array
 {
     if (! tenant()) {

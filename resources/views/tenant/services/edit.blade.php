@@ -13,6 +13,32 @@
                         @csrf
                         @method('PUT')
 
+                        <!-- Display success message -->
+                        @if (session('success'))
+                            <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-md">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <!-- Display validation errors -->
+                        @if ($errors->any())
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md">
+                                <p class="font-medium">{{ __('Please fix the following errors:') }}</p>
+                                <ul class="mt-2 list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <!-- Display session error message -->
+                        @if (session('error'))
+                            <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-800 rounded-md">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
                         <!-- Type -->
                         <div class="mb-4">
                             <x-input-label for="type" :value="__('Type')" />
@@ -26,7 +52,6 @@
                             @if ($service->image)
                                 <div class="mt-2 mb-2">
                                     <img src="{{ asset($service->image) }}" alt="{{ $service->translations->first()->name ?? 'Service' }}" class="h-16">
-                                    <p class="mt-1 text-sm text-gray-500">{{ __('Current image') }}</p>
                                 </div>
                             @endif
                             <input id="image" class="block mt-1 w-full" type="file" name="image" accept="image/*" />
@@ -53,24 +78,24 @@
                         <!-- Translations -->
                         <div class="mb-4">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Translations') }}</h3>
-                            
+
                             @foreach ($languages as $language)
                                 <div class="p-4 mb-4 border rounded-md">
                                     <h4 class="font-medium text-gray-800 mb-2">{{ $language->name }} ({{ $language->code }})</h4>
-                                    
+
                                     <input type="hidden" name="translations[{{ $loop->index }}][lang_id]" value="{{ $language->id }}">
-                                    
+
                                     @php
                                         $translation = $service->getTranslation($language->id);
                                     @endphp
-                                    
+
                                     <!-- Name -->
                                     <div class="mb-3">
                                         <x-input-label for="translations_{{ $loop->index }}_name" :value="__('Name')" />
                                         <x-text-input id="translations_{{ $loop->index }}_name" class="block mt-1 w-full" type="text" name="translations[{{ $loop->index }}][name]" :value="old('translations.' . $loop->index . '.name', $translation ? $translation->name : '')" required />
                                         <x-input-error :messages="$errors->get('translations.' . $loop->index . '.name')" class="mt-2" />
                                     </div>
-                                    
+
                                     <!-- Description -->
                                     <div>
                                         <x-input-label for="translations_{{ $loop->index }}_description" :value="__('Description')" />

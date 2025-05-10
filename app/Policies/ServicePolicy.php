@@ -21,6 +21,14 @@ class ServicePolicy
     }
 
     /**
+     * Determine whether the user can view the service.
+     */
+    public function store(User $user): bool
+    {
+        return in_array(getTenantId(), getAuthTenantIds());
+    }
+
+    /**
      * Determine whether the user can update the service.
      */
     public function update(User $user, Service $service): bool

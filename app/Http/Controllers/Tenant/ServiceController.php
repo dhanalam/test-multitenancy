@@ -14,6 +14,7 @@ use App\Models\Language;
 use App\Models\Service;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -34,6 +35,7 @@ class ServiceController extends Controller
      */
     public function create(): View
     {
+        dd('asdf');
         $languages = Language::where('country_id', getTenantId())->get();
 
         return view('tenant.services.create', compact('languages'));
@@ -67,9 +69,9 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified service.
      */
-    public function edit(Service $service): View
+    public function edit(Request $request, Service $service): View
     {
-        $this->authorize('update', $service);
+        $request->user()->can('update', $service);
         $service->load('translations');
         $languages = getLanguagesByTenant();
 
@@ -81,8 +83,6 @@ class ServiceController extends Controller
      */
     public function update(UpdateServiceRequest $request, Service $service, UpdateServiceAction $action): RedirectResponse
     {
-        $this->authorize('update', $service);
-
         try {
             $action->handle($service, $request->validated(), $request->file('image'));
 

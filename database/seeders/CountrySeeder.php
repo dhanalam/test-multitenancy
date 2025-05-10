@@ -28,8 +28,8 @@ class CountrySeeder extends Seeder
                 'name' => 'India',
             ],
             [
-                'id' => 'gb',
-                'name' => 'England',
+                'id' => 'en',
+                'name' => 'America',
             ],
         ];
 

@@ -33,7 +33,6 @@ class UpdateServiceAction
                 'order_no' => $data['order_no'] ?? $service->order_no,
             ];
 
-            // Handle image upload
             if ($image) {
                 // Delete old image if exists
                 if ($service->image && file_exists(public_path($service->image))) {
