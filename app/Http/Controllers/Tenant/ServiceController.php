@@ -12,10 +12,8 @@ use App\Http\Requests\Tenant\StoreServiceRequest;
 use App\Http\Requests\Tenant\UpdateServiceRequest;
 use App\Models\Language;
 use App\Models\Service;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ServiceController extends Controller
@@ -35,7 +33,6 @@ class ServiceController extends Controller
      */
     public function create(): View
     {
-        dd('asdf');
         $languages = Language::where('country_id', getTenantId())->get();
 
         return view('tenant.services.create', compact('languages'));
@@ -43,24 +40,21 @@ class ServiceController extends Controller
 
     /**
      * Store a newly created service in storage.
+     * @throws \Exception
      */
     public function store(StoreServiceRequest $request, CreateServiceAction $createServiceAction): RedirectResponse
     {
-        try {
-            $createServiceAction->handle(tenant('id'), $request->validated(), $request->file('image'));
+        $createServiceAction->handle(tenant('id'), $request->validated(), $request->file('image'));
 
-            return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])->with('success', 'Service created successfully.');
-        } catch (Exception $e) {
-            return back()->withInput()->with('error', 'Error creating service: ' . $e->getMessage());
-        }
+        return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])->with('success', 'Service created successfully.');
     }
 
     /**
      * Display the specified service.
      */
-    public function show(Service $service): View
+    public function show(Request $request, Service $service): View
     {
-        $this->authorize('view', $service);
+        $request->user()->authorize('view', $service);
         $service->load('translations.language');
 
         return view('tenant.services.show', compact('service'));
@@ -80,34 +74,28 @@ class ServiceController extends Controller
 
     /**
      * Update the specified service in storage.
+     * @throws \Exception
      */
     public function update(UpdateServiceRequest $request, Service $service, UpdateServiceAction $action): RedirectResponse
     {
-        try {
-            $action->handle($service, $request->validated(), $request->file('image'));
+        $action->handle($service, $request->validated(), $request->file('image'));
 
-            return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
-                ->with('success', 'Service updated successfully.');
-        } catch (Exception $e) {
-            return back()->withInput()->with('error', 'Error updating service: ' . $e->getMessage());
-        }
+        return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
+            ->with('success', 'Service updated successfully.');
     }
 
     /**
      * Remove the specified service from storage.
+     * @throws \Exception
      */
-    public function destroy(Service $service, DeleteServiceAction $action): RedirectResponse
+    public function destroy(Request $request, Service $service, DeleteServiceAction $action): RedirectResponse
     {
-        $this->authorize('delete', $service);
+        $request->user()->authorize('delete', $service);
 
-        try {
-            $action->handle($service);
+        $action->handle($service);
 
-            return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
-                ->with('success', 'Service deleted successfully.');
-        } catch (Exception $e) {
-            return back()->with('error', 'Error deleting service: ' . $e->getMessage());
-        }
+        return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
+            ->with('success', 'Service deleted successfully.');
     }
 
 }

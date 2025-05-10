@@ -21,5 +21,26 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+
+        $exceptions->renderable(function (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+
+            return back()->withInput()->with('error', 'Error: ' . $e->getMessage());
+        });
+
+        $exceptions->renderable(function (\Illuminate\Validation\ValidationException $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'message' => 'Validation error',
+                    'errors' => $e->validator->getMessageBag()
+                ], 422);
+            }
+
+            return back()->withInput()->withErrors($e->validator->getMessageBag());
+        });
+
     })->create();
