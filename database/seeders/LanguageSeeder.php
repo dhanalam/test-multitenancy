@@ -34,7 +34,7 @@ class LanguageSeeder extends Seeder
                 'code' => 'ru',
                 'default' => false,
             ],
-            
+
             // Nepal languages
             [
                 'country_id' => 'np',

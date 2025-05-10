@@ -13,13 +13,13 @@ class Country extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains;
 
+    public $incrementing = false;
+
     protected $table = 'countries';
 
     protected $primaryKey = 'id';
 
     protected $keyType = 'string';
-
-    public $incrementing = false;
 
     public static function getCustomColumns(): array
     {

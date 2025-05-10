@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Tenant;
 
 use App\Models\Service;
+use Exception;
 
 class DeleteServiceAction
 {
@@ -13,7 +14,7 @@ class DeleteServiceAction
      *
      * @param Service $service
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(Service $service): bool
     {
@@ -26,7 +27,7 @@ class DeleteServiceAction
             $service->delete();
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }

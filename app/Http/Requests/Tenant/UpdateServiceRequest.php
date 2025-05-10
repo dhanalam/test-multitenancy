@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Tenant;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateServiceRequest extends FormRequest
 {
@@ -19,7 +20,7 @@ class UpdateServiceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, array<mixed>|\Illuminate\Contracts\Validation\ValidationRule|string>
      */
     public function rules(): array
     {
@@ -29,7 +30,7 @@ class UpdateServiceRequest extends FormRequest
             'is_active' => 'boolean',
             'order_no' => 'integer',
             'translations' => 'required|array',
-            'translations.*.lang_id' => 'required|exists:languages,id',
+            'translations.*.lang_id' => ['required', Rule::exists('languages', 'id')->where('country_id', getTenantId())],
             'translations.*.name' => 'required|string|max:255',
             'translations.*.description' => 'nullable|string',
         ];

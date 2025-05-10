@@ -6,6 +6,7 @@ namespace App\Actions\Tenant;
 
 use App\Models\Service;
 use App\Models\ServiceTranslation;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -19,7 +20,7 @@ class CreateServiceAction
      * @param array<string, mixed> $data
      * @param UploadedFile|null $image
      * @return Service
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(string $tenantId, array $data, ?UploadedFile $image = null): Service
     {
@@ -57,8 +58,9 @@ class CreateServiceAction
             DB::commit();
 
             return $service;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
+
             throw $e;
         }
     }

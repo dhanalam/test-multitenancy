@@ -45,7 +45,7 @@ class UpdateLanguageAction
                 ->where('default', true)
                 ->update(['default' => false]);
             $languageData['default'] = true;
-        } elseif ($language->default && !($data['default'] ?? false)) {
+        } elseif ($language->default && ! ($data['default'] ?? false)) {
             // Don't allow unsetting default if this is the only language or the only default
             if (Language::count() === 1 || Language::where('default', true)->count() === 1) {
                 $languageData['default'] = true;

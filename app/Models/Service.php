@@ -49,7 +49,7 @@ class Service extends Model
      */
     public function translations(): HasMany
     {
-        return $this->hasMany(ServiceTranslation::class);
+        return $this->hasMany(ServiceTranslation::class)->whereIn('service_translations.lang_id', getLanguageIdsByTenant());
     }
 
     /**

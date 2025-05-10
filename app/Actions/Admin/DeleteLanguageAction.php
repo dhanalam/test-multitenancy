@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions\Admin;
 
 use App\Models\Language;
-use Illuminate\Http\RedirectResponse;
 
 class DeleteLanguageAction
 {

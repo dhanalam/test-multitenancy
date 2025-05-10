@@ -27,10 +27,9 @@ Route::middleware([
     // PreventAccessFromCentralDomains::class,
 ])
     ->prefix('/{tenant}')
+    ->name('tenant.')
     ->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', fn () => view('tenant.dashboard'))->name('dashboard');
 
         // Profile routes
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,5 +37,5 @@ Route::middleware([
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
         // Service routes
-        Route::resource('services', ServiceController::class, ['as' => 'tenant']);
+        Route::resource('services', ServiceController::class);
     });

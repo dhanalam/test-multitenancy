@@ -30,7 +30,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
  *
  * @uses \Illuminate\Database\Eloquent\Factories\HasFactory For model factory support
  * @uses \Illuminate\Notifications\Notifiable For sending notifications
- * @uses \App\Traits\BelongsToTenant For multi-tenancy support
+ * @uses \Stancl\Tenancy\Database\Concerns\BelongsToTenant For multi-tenancy support
  *
  * @extends \Illuminate\Foundation\Auth\User
  * @implements \Illuminate\Contracts\Auth\Authenticatable
@@ -68,6 +68,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Country::class, 'tenant_user', 'user_id', 'tenant_id');
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin->value;
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -79,10 +84,5 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    public function isAdmin(): bool
-    {
-        return $this->role === UserRole::Admin->value;
     }
 }

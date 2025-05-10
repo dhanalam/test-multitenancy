@@ -23,6 +23,7 @@ class LanguageController extends Controller
     public function index(): View
     {
         $languages = Language::with('country')->get();
+
         return view('admin.languages.index', compact('languages'));
     }
 
@@ -32,6 +33,7 @@ class LanguageController extends Controller
     public function create(): View
     {
         $countries = Country::all();
+
         return view('admin.languages.create', compact('countries'));
     }
 
@@ -52,6 +54,7 @@ class LanguageController extends Controller
     public function show(Language $language): View
     {
         $language->load('country');
+
         return view('admin.languages.show', compact('language'));
     }
 
@@ -61,6 +64,7 @@ class LanguageController extends Controller
     public function edit(Language $language): View
     {
         $countries = Country::all();
+
         return view('admin.languages.edit', compact('language', 'countries'));
     }
 
