@@ -7,7 +7,7 @@ namespace App\Actions\Tenant;
 use App\Models\Service;
 use Exception;
 
-class DeleteServiceAction
+class DeleteService
 {
     /**
      * Delete a service.

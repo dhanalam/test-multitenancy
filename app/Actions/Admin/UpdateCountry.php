@@ -6,19 +6,21 @@ namespace App\Actions\Admin;
 
 use App\Models\Country;
 
-class CreateCountryAction
+class UpdateCountry
 {
     /**
-     * Create a new country.
+     * Update an existing country.
      *
+     * @param Country $country
      * @param array<string, mixed> $data
      * @return Country
      */
-    public function handle(array $data): Country
+    public function handle(Country $country, array $data): Country
     {
-        return Country::create([
-            'id' => $data['code'],
+        $country->update([
             'name' => $data['name'],
         ]);
+
+        return $country;
     }
 }

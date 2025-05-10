@@ -7,7 +7,7 @@ namespace App\Actions\Admin;
 use App\Models\Language;
 use Illuminate\Http\UploadedFile;
 
-class UpdateLanguageAction
+class UpdateLanguage
 {
     /**
      * Update an existing language.

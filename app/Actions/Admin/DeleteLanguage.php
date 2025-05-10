@@ -6,19 +6,20 @@ namespace App\Actions\Admin;
 
 use App\Models\Language;
 
-class DeleteLanguageAction
+class DeleteLanguage
 {
     /**
      * Delete a language.
      *
      * @param Language $language
      * @return bool|string Returns true if successful, or an error message if not
+     * @throws \Exception
      */
     public function handle(Language $language): bool|string
     {
         // Don't allow deleting the default language if it's the only one
         if ($language->default && Language::count() === 1) {
-            return 'Cannot delete the only language.';
+            throw new \Exception('Cannot delete the only language.');
         }
 
         // If deleting the default language, make another one default
@@ -35,7 +36,5 @@ class DeleteLanguageAction
         }
 
         $language->delete();
-
-        return true;
     }
 }

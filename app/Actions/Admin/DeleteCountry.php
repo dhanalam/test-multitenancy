@@ -6,7 +6,7 @@ namespace App\Actions\Admin;
 
 use App\Models\Country;
 
-class DeleteCountryAction
+class DeleteCountry
 {
     /**
      * Delete a country.

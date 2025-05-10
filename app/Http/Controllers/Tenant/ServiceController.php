@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Tenant;
 
-use App\Actions\Tenant\CreateServiceAction;
-use App\Actions\Tenant\DeleteServiceAction;
-use App\Actions\Tenant\UpdateServiceAction;
+use App\Actions\Tenant\CreateService;
+use App\Actions\Tenant\DeleteService;
+use App\Actions\Tenant\UpdateService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenant\StoreServiceRequest;
 use App\Http\Requests\Tenant\UpdateServiceRequest;
@@ -42,9 +42,9 @@ class ServiceController extends Controller
      * Store a newly created service in storage.
      * @throws \Exception
      */
-    public function store(StoreServiceRequest $request, CreateServiceAction $createServiceAction): RedirectResponse
+    public function store(StoreServiceRequest $request, CreateService $createService): RedirectResponse
     {
-        $createServiceAction->handle(tenant('id'), $request->validated(), $request->file('image'));
+        $createService->handle(tenant('id'), $request->validated(), $request->file('image'));
 
         return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])->with('success', 'Service created successfully.');
     }
@@ -76,9 +76,9 @@ class ServiceController extends Controller
      * Update the specified service in storage.
      * @throws \Exception
      */
-    public function update(UpdateServiceRequest $request, Service $service, UpdateServiceAction $action): RedirectResponse
+    public function update(UpdateServiceRequest $request, Service $service, UpdateService $updateService): RedirectResponse
     {
-        $action->handle($service, $request->validated(), $request->file('image'));
+        $updateService->handle($service, $request->validated(), $request->file('image'));
 
         return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
             ->with('success', 'Service updated successfully.');
@@ -88,11 +88,11 @@ class ServiceController extends Controller
      * Remove the specified service from storage.
      * @throws \Exception
      */
-    public function destroy(Request $request, Service $service, DeleteServiceAction $action): RedirectResponse
+    public function destroy(Request $request, Service $service, DeleteService $deleteService): RedirectResponse
     {
         $request->user()->authorize('delete', $service);
 
-        $action->handle($service);
+        $deleteService->handle($service);
 
         return redirect()->route('tenant.services.index', ['tenant' => tenant('id')])
             ->with('success', 'Service deleted successfully.');

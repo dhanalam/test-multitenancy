@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\CreateLanguageAction;
-use App\Actions\Admin\DeleteLanguageAction;
-use App\Actions\Admin\UpdateLanguageAction;
+use App\Actions\Admin\CreateLanguage;
+use App\Actions\Admin\DeleteLanguage;
+use App\Actions\Admin\UpdateLanguage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreLanguageRequest;
 use App\Http\Requests\Admin\UpdateLanguageRequest;
@@ -40,9 +40,9 @@ class LanguageController extends Controller
     /**
      * Store a newly created language in storage.
      */
-    public function store(StoreLanguageRequest $request, CreateLanguageAction $action): RedirectResponse
+    public function store(StoreLanguageRequest $request, CreateLanguage $createLanguage): RedirectResponse
     {
-        $action->handle($request->validated(), $request->file('thumbnail'));
+        $createLanguage->handle($request->validated(), $request->file('thumbnail'));
 
         return redirect()->route('admin.languages.index')
             ->with('success', 'Language created successfully.');
@@ -71,9 +71,9 @@ class LanguageController extends Controller
     /**
      * Update the specified language in storage.
      */
-    public function update(UpdateLanguageRequest $request, Language $language, UpdateLanguageAction $action): RedirectResponse
+    public function update(UpdateLanguageRequest $request, Language $language, UpdateLanguage $updateLanguage): RedirectResponse
     {
-        $action->handle($language, $request->validated(), $request->file('thumbnail'));
+        $updateLanguage->handle($language, $request->validated(), $request->file('thumbnail'));
 
         return redirect()->route('admin.languages.index')
             ->with('success', 'Language updated successfully.');
@@ -81,15 +81,11 @@ class LanguageController extends Controller
 
     /**
      * Remove the specified language from storage.
+     * @throws \Exception
      */
-    public function destroy(Language $language, DeleteLanguageAction $action): RedirectResponse
+    public function destroy(Language $language, DeleteLanguage $deleteLanguage): RedirectResponse
     {
-        $result = $action->handle($language);
-
-        if ($result !== true) {
-            return redirect()->route('admin.languages.index')
-                ->with('error', $result);
-        }
+        $deleteLanguage->handle($language);
 
         return redirect()->route('admin.languages.index')
             ->with('success', 'Language deleted successfully.');
