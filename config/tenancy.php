@@ -17,7 +17,7 @@ return [
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
     'central_domains' => [
-        'loc_laravel12',
+        env('APP_URL', 'localhost'),
     ],
 
     /**

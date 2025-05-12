@@ -32,7 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 ], 500);
             }
 
-            return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            if ( $e instanceof \Illuminate\Database\QueryException) {
+                return back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            }
         });
 
         $exceptions->renderable(function (Illuminate\Validation\ValidationException $e) {

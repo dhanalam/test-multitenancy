@@ -56,7 +56,7 @@ class ServiceController extends Controller
      */
     public function show(Request $request, Service $service): View
     {
-        $request->user()->authorize('view', $service);
+        $request->user()->can('view', $service);
         $service->load('translations.language');
 
         return view('tenant.services.show', compact('service'));
