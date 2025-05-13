@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->smallIncrements('id');
+        Schema::create('projects', function (Blueprint $table) {
+            $table->id();
             $table->string('country_id');
             $table->foreign('country_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('type', 100);
-            $table->string('image', 200)->nullable();
-            $table->boolean('is_active')->default(1);
-            $table->unsignedTinyInteger('order_no')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('projects');
     }
 };

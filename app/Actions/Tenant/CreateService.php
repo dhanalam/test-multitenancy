@@ -23,7 +23,6 @@ final class CreateService
     public function handle(string $tenantId, array $data, ?UploadedFile $image = null): void
     {
         $serviceData = [
-            'tenant_id' => $tenantId,
             'type' => $data['type'],
             'is_active' => $data['is_active'] ?? true,
             'order_no' => $data['order_no'] ?? 0,

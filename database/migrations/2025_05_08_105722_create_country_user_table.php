@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenant_user', function (Blueprint $table) {
+        Schema::create('country_user', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained();
-            $table->string('tenant_id');
-            $table->foreign('tenant_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('country_id');
+            $table->foreign('country_id')->references('id')->on('countries')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
         Schema::table('users', function (Blueprint $table) {
-            $table->string('tenant_id')->nullable();
-            $table->foreign('tenant_id')->references('id')->on('countries')->cascadeOnUpdate()->nullOnDelete();
+            $table->string('country_id')->nullable();
+            $table->foreign('country_id')->references('id')->on('countries')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenant_user');
+        Schema::dropIfExists('user_country');
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('tenant_id');
         });

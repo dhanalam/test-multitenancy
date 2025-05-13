@@ -32,6 +32,6 @@ class Country extends BaseTenant implements TenantWithDatabase
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'tenant_user', 'tenant_id', 'user_id');
+        return $this->belongsToMany(User::class, 'country_user', 'country_id', 'user_id');
     }
 }

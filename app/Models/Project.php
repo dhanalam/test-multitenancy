@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
-class Service extends Model
+class Project extends Model
 {
     use BelongsToTenant, HasFactory;
 
@@ -20,9 +20,7 @@ class Service extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'tenant_id',
-        'type',
-        'image',
+        'country_id',
         'is_active',
         'order_no',
     ];
@@ -38,19 +36,27 @@ class Service extends Model
     ];
 
     /**
-     * Get the tenant that owns the service.
+     * Get the tenant that owns the project.
      */
     public function country(): BelongsTo
     {
-        return $this->belongsTo(Country::class, 'tenant_id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
     /**
-     * Get the translations for the service.
+     * Get the translations for the project.
      */
     public function translations(): HasMany
     {
-        return $this->hasMany(ServiceTranslation::class)->whereIn('service_translations.lang_id', getLanguageIdsByTenant());
+        return $this->hasMany(ProjectTranslation::class)->whereIn('project_translations.lang_id', getLanguageIdsByTenant());
+    }
+
+    /**
+     * Get the tasks for the project.
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 
     /**

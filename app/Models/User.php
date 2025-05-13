@@ -41,6 +41,7 @@ class User extends Authenticatable
 {
     use BelongsToTenant, HasFactory, Notifiable;
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -63,9 +64,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function tenants(): BelongsToMany
+    public function countries(): BelongsToMany
     {
-        return $this->belongsToMany(Country::class, 'tenant_user', 'user_id', 'tenant_id');
+        return $this->belongsToMany(Country::class, 'country_user', 'user_id', 'country_id');
     }
 
     public function isAdmin(): bool

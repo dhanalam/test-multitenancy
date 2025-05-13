@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Tenant\ProfileController;
+use App\Http\Controllers\Tenant\ProjectController;
 use App\Http\Controllers\Tenant\ServiceController;
+use App\Http\Controllers\Tenant\TaskController;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByPath;
 
@@ -29,7 +31,9 @@ Route::middleware([
     ->prefix('/{tenant}')
     ->name('tenant.')
     ->group(function () {
-        Route::get('/dashboard', fn () => view('tenant.dashboard'))->name('dashboard');
+        Route::get('/dashboard', function () {
+            return view('tenant.dashboard');
+        })->name('dashboard');
 
         // Profile routes
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,4 +42,10 @@ Route::middleware([
 
         // Service routes
         Route::resource('services', ServiceController::class);
+
+        // Project routes
+        Route::resource('projects', ProjectController::class);
+
+        // Task routes
+        Route::resource('tasks', TaskController::class);
     });
