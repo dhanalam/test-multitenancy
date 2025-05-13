@@ -41,7 +41,6 @@ class User extends Authenticatable
 {
     use BelongsToTenant, HasFactory, Notifiable;
 
-
     /**
      * The attributes that are mass assignable.
      *

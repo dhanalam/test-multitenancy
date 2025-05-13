@@ -12,7 +12,7 @@ function getTenantId(): ?string
         return (string) tenant('id');
     }
 
-    return auth()->check() ? auth()->user()->country_id : null;
+    return auth()->check() ? auth()->user()?->country_id : null;
 }
 
 /**

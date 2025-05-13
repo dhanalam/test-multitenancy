@@ -26,7 +26,7 @@ class TaskController extends Controller
     public function index(Request $request): View
     {
         $projectId = $request->query('project_id');
-        $tasks = $projectId 
+        $tasks = $projectId
             ? Task::where('project_id', $projectId)->get()
             : Task::get();
 

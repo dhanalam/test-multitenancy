@@ -10,8 +10,6 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class AppServiceProvider extends ServiceProvider
 {
-
-
     /**
      * Register any application services.
      */
