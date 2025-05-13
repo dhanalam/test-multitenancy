@@ -21,18 +21,6 @@ class Project extends Model
      */
     protected $fillable = [
         'country_id',
-        'is_active',
-        'order_no',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-        'order_no' => 'integer',
     ];
 
     /**

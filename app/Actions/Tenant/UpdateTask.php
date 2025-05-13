@@ -20,15 +20,10 @@ final class UpdateTask
      */
     public function handle(Task $task, array $data): void
     {
-        $taskData = [
-            'project_id' => $data['project_id'] ?? $task->project_id,
-            'is_active' => $data['is_active'] ?? $task->is_active,
-            'order_no' => $data['order_no'] ?? $task->order_no,
-        ];
 
-        dbTransaction(function () use ($task, $taskData, $data) {
+        dbTransaction(function () use ($task, $data) {
             // Update task
-            $task->update($taskData);
+            $task->update(['project_id' => $data['project_id'] ?? $task->project_id]);
 
             // Update translations
             foreach ($data['translations'] as $translationData) {

@@ -18,15 +18,9 @@ final class CreateTask
      */
     public function handle(array $data): void
     {
-        $taskData = [
-            'project_id' => $data['project_id'],
-            'is_active' => $data['is_active'] ?? true,
-            'order_no' => $data['order_no'] ?? 0,
-        ];
-
-        dbTransaction(function () use ($taskData, $data) {
+        dbTransaction(function () use ($data) {
             // Create task
-            $task = Task::create($taskData);
+            $task = Task::create(['project_id' => $data['project_id']]);
 
             // Create translations
             foreach ($data['translations'] as $translation) {

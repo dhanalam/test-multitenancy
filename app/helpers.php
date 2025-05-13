@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Language;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 function getTenantId(): ?string
@@ -45,7 +46,7 @@ function getLanguagesByTenant(): Collection
 
 function getAllLanguages(): Collection
 {
-    return Language::all();
+    return Cache::rememberForever('languages', fn () => Language::all());
 }
 
 /**
@@ -67,4 +68,18 @@ function dbTransaction(callable $callback): void
 
         throw $e;
     }
+}
+
+/**
+ * Get executed SQL queries.
+ *
+ * @param callable $callback
+ * @return array
+ */
+function getSqlQuery(callable $callback): array
+{
+    DB::enableQueryLog();
+    $callback();
+
+    return DB::getQueryLog();
 }

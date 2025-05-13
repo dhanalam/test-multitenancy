@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Stancl\Tenancy\Database\Concerns\BelongsToPrimaryModel;
 
 class Task extends Model
 {
-    use HasFactory;
+    use BelongsToPrimaryModel, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -20,19 +21,12 @@ class Task extends Model
      */
     protected $fillable = [
         'project_id',
-        'is_active',
-        'order_no',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_active' => 'boolean',
-        'order_no' => 'integer',
-    ];
+    public function getRelationshipToPrimaryModel(): string
+    {
+        return 'project';
+    }
 
     /**
      * Get the project that owns the task.

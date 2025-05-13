@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         BelongsToTenant::$tenantIdColumn = 'country_id';
+        Model::unguard();
+        Model::shouldBeStrict();
         if (tenant()) {
             RedirectIfAuthenticated::redirectUsing(fn () => route('dashboard', ['tenant' => tenant()]));
         }

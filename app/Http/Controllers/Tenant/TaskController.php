@@ -26,9 +26,8 @@ class TaskController extends Controller
     public function index(Request $request): View
     {
         $projectId = $request->query('project_id');
-        $tasks = $projectId
-            ? Task::where('project_id', $projectId)->get()
-            : Task::get();
+
+        $tasks = Task::when($projectId, fn ($query) => $query('project_id', $projectId))->get()->withRelationshipAutoloading();
 
         return view('tenant.tasks.index', compact('tasks'));
     }
@@ -39,7 +38,7 @@ class TaskController extends Controller
     public function create(Request $request): View
     {
         $languages = Language::where('country_id', getTenantId())->get();
-        $projects = Project::get();
+        $projects = Project::get()->withRelationshipAutoloading();
         $projectId = $request->query('project_id');
 
         return view('tenant.tasks.create', compact('languages', 'projects', 'projectId'));
@@ -74,9 +73,9 @@ class TaskController extends Controller
     public function edit(Request $request, Task $task): View
     {
         $request->user()->can('update', $task);
-        $task->load('translations');
+        $task->withRelationshipAutoloading();
         $languages = getLanguagesByTenant();
-        $projects = Project::get();
+        $projects = Project::get()->withRelationshipAutoloading();
 
         return view('tenant.tasks.edit', compact('task', 'languages', 'projects'));
     }
@@ -99,7 +98,7 @@ class TaskController extends Controller
      */
     public function destroy(Request $request, Task $task, DeleteTask $deleteTask): RedirectResponse
     {
-        $request->user()->authorize('delete', $task);
+        $request->user()->can('delete', $task);
 
         $deleteTask->handle($task);
 

@@ -13,19 +13,6 @@ class ProjectTranslation extends Model
     use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'project_id',
-        'lang_id',
-        'name',
-        'slug',
-        'description',
-    ];
-
-    /**
      * Get the project that owns the translation.
      */
     public function project(): BelongsTo

@@ -91,7 +91,7 @@ class ServiceController extends Controller
      */
     public function destroy(Request $request, Service $service, DeleteService $deleteService): RedirectResponse
     {
-        $request->user()->authorize('delete', $service);
+        $request->user()->can('delete', $service);
 
         $deleteService->handle($service);
 

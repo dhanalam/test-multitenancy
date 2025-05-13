@@ -24,22 +24,6 @@
                             </div>
                         @endif
 
-                        <!-- Is Active -->
-                        <div class="mb-4">
-                            <div class="flex items-center">
-                                <input id="is_active" type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                <x-input-label for="is_active" :value="__('Active')" class="ms-2" />
-                            </div>
-                            <x-input-error :messages="$errors->get('is_active')" class="mt-2" />
-                        </div>
-
-                        <!-- Order No -->
-                        <div class="mb-4">
-                            <x-input-label for="order_no" :value="__('Order Number')" />
-                            <x-text-input id="order_no" class="block mt-1 w-full" type="number" name="order_no" :value="old('order_no', 0)" min="0" />
-                            <x-input-error :messages="$errors->get('order_no')" class="mt-2" />
-                        </div>
-
                         <!-- Translations -->
                         <div class="mb-4">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Translations') }}</h3>
@@ -56,13 +40,7 @@
                                         <x-text-input id="translations_{{ $loop->index }}_name" class="block mt-1 w-full" type="text" name="translations[{{ $loop->index }}][name]" :value="old('translations.' . $loop->index . '.name')" required />
                                         <x-input-error :messages="$errors->get('translations.' . $loop->index . '.name')" class="mt-2" />
                                     </div>
-                                    
-                                    <!-- Description -->
-                                    <div>
-                                        <x-input-label for="translations_{{ $loop->index }}_description" :value="__('Description')" />
-                                        <textarea id="translations_{{ $loop->index }}_description" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="translations[{{ $loop->index }}][description]" rows="3">{{ old('translations.' . $loop->index . '.description') }}</textarea>
-                                        <x-input-error :messages="$errors->get('translations.' . $loop->index . '.description')" class="mt-2" />
-                                    </div>
+
                                 </div>
                             @endforeach
                         </div>

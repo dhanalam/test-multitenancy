@@ -57,22 +57,6 @@
                             <x-input-error :messages="$errors->get('project_id')" class="mt-2" />
                         </div>
 
-                        <!-- Is Active -->
-                        <div class="mb-4">
-                            <div class="flex items-center">
-                                <input id="is_active" type="checkbox" name="is_active" value="1" {{ old('is_active', $task->is_active) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                <x-input-label for="is_active" :value="__('Active')" class="ms-2" />
-                            </div>
-                            <x-input-error :messages="$errors->get('is_active')" class="mt-2" />
-                        </div>
-
-                        <!-- Order No -->
-                        <div class="mb-4">
-                            <x-input-label for="order_no" :value="__('Order Number')" />
-                            <x-text-input id="order_no" class="block mt-1 w-full" type="number" name="order_no" :value="old('order_no', $task->order_no)" min="0" />
-                            <x-input-error :messages="$errors->get('order_no')" class="mt-2" />
-                        </div>
-
                         <!-- Translations -->
                         <div class="mb-4">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Translations') }}</h3>
@@ -84,7 +68,7 @@
                                     <input type="hidden" name="translations[{{ $loop->index }}][lang_id]" value="{{ $language->id }}">
 
                                     @php
-                                        $translation = $task->getTranslation($language->id);
+                                        $translation = $task->translations->where('lang_id', $language->id)->first();
                                     @endphp
 
                                     <!-- Name -->

@@ -25,8 +25,6 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_active' => 'boolean',
-            'order_no' => 'integer',
             'translations' => 'required|array',
             'translations.*.lang_id' => ['required', Rule::exists('languages', 'id')->where('country_id', getTenantId())],
             'translations.*.name' => 'required|string|max:255',

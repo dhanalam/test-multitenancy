@@ -7,7 +7,6 @@ namespace App\Actions\Tenant;
 use App\Models\Project;
 use App\Models\ProjectTranslation;
 use Exception;
-use Illuminate\Support\Str;
 
 final class UpdateProject
 {
@@ -21,16 +20,8 @@ final class UpdateProject
      */
     public function handle(Project $project, array $data): void
     {
-        $projectData = [
-            'is_active' => $data['is_active'] ?? $project->is_active,
-            'order_no' => $data['order_no'] ?? $project->order_no,
-        ];
+        dbTransaction(function () use ($project, $data) {
 
-        dbTransaction(function () use ($project, $projectData, $data) {
-            // Update project
-            $project->update($projectData);
-
-            // Update translations
             foreach ($data['translations'] as $translationData) {
                 ProjectTranslation::updateOrCreate(
                     [
@@ -39,8 +30,6 @@ final class UpdateProject
                     ],
                     [
                         'name' => $translationData['name'],
-                        'slug' => Str::slug($translationData['name']),
-                        'description' => $translationData['description'] ?? null,
                     ]
                 );
             }

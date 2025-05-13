@@ -28,22 +28,7 @@
                                 <span class="text-gray-400">{{ __('Unknown project') }}</span>
                             @endif
                         </p>
-                        
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ __('Status') }}: 
-                            @if ($task->is_active)
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{ __('Active') }}
-                                </span>
-                            @else
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                    {{ __('Inactive') }}
-                                </span>
-                            @endif
-                        </p>
-                        
-                        <p class="mt-1 text-sm text-gray-600">{{ __('Order Number') }}: {{ $task->order_no }}</p>
-                        
+
                         <div class="mt-6">
                             <h4 class="text-md font-medium text-gray-800 mb-2">{{ __('Translations') }}</h4>
                             

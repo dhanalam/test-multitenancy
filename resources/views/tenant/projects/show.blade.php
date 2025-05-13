@@ -17,22 +17,7 @@
                                 {{ __('Project') }} #{{ $project->id }}
                             @endif
                         </h3>
-                        
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ __('Status') }}: 
-                            @if ($project->is_active)
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {{ __('Active') }}
-                                </span>
-                            @else
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                    {{ __('Inactive') }}
-                                </span>
-                            @endif
-                        </p>
-                        
-                        <p class="mt-1 text-sm text-gray-600">{{ __('Order Number') }}: {{ $project->order_no }}</p>
-                        
+
                         <div class="mt-6">
                             <h4 class="text-md font-medium text-gray-800 mb-2">{{ __('Translations') }}</h4>
                             
@@ -41,13 +26,6 @@
                                     <div class="p-4 border rounded-md">
                                         <h5 class="font-medium text-gray-700">{{ $translation->language->name }} ({{ $translation->language->code }})</h5>
                                         <p class="mt-1 text-sm text-gray-600">{{ __('Name') }}: {{ $translation->name }}</p>
-                                        
-                                        @if ($translation->description)
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-600">{{ __('Description') }}:</p>
-                                                <p class="mt-1 text-sm text-gray-800">{{ $translation->description }}</p>
-                                            </div>
-                                        @endif
                                     </div>
                                 @empty
                                     <p class="text-sm text-gray-500">{{ __('No translations available.') }}</p>
@@ -72,12 +50,6 @@
                                                 {{ __('Name') }}
                                             </th>
                                             <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                {{ __('Active') }}
-                                            </th>
-                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                {{ __('Order') }}
-                                            </th>
-                                            <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 {{ __('Actions') }}
                                             </th>
                                         </tr>
@@ -91,20 +63,6 @@
                                                     @else
                                                         <span class="text-gray-400">{{ __('No translation') }}</span>
                                                     @endif
-                                                </td>
-                                                <td class="py-2 px-4 border-b border-gray-200">
-                                                    @if ($task->is_active)
-                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                            {{ __('Yes') }}
-                                                        </span>
-                                                    @else
-                                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                            {{ __('No') }}
-                                                        </span>
-                                                    @endif
-                                                </td>
-                                                <td class="py-2 px-4 border-b border-gray-200">
-                                                    {{ $task->order_no }}
                                                 </td>
                                                 <td class="py-2 px-4 border-b border-gray-200">
                                                     <div class="flex space-x-2">

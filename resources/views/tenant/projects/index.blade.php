@@ -22,7 +22,7 @@
                     @endif
 
                     <div class="flex justify-end mb-4">
-                        <a href="{{ route('tenant.projects.create', ['tenant' => tenant('id')]) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        <a href="{{ route('tenant.projects.create', ['tenant' => getTenantId()]) }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                             {{ __('Add Project') }}
                         </a>
                     </div>
@@ -33,12 +33,6 @@
                                 <tr>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {{ __('Name') }}
-                                    </th>
-                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Active') }}
-                                    </th>
-                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Order') }}
                                     </th>
                                     <th class="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {{ __('Tasks') }}
@@ -59,33 +53,19 @@
                                             @endif
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
-                                            @if ($project->is_active)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                                    {{ __('Yes') }}
-                                                </span>
-                                            @else
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                                    {{ __('No') }}
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="py-2 px-4 border-b border-gray-200">
-                                            {{ $project->order_no }}
-                                        </td>
-                                        <td class="py-2 px-4 border-b border-gray-200">
-                                            <a href="{{ route('tenant.tasks.index', ['tenant' => tenant('id'), 'project_id' => $project->id]) }}" class="text-blue-500 hover:text-blue-700">
+                                            <a href="{{ route('tenant.tasks.index', ['tenant' => getTenantId(), 'project_id' => $project->id]) }}" class="text-blue-500 hover:text-blue-700">
                                                 {{ $project->tasks->count() }} {{ __('Tasks') }}
                                             </a>
                                         </td>
                                         <td class="py-2 px-4 border-b border-gray-200">
                                             <div class="flex space-x-2">
-                                                <a href="{{ route('tenant.projects.show', ['tenant' => tenant('id'), 'project' => $project]) }}" class="text-blue-500 hover:text-blue-700">
+                                                <a href="{{ route('tenant.projects.show', ['tenant' => getTenantId(), 'project' => $project]) }}" class="text-blue-500 hover:text-blue-700">
                                                     {{ __('View') }}
                                                 </a>
-                                                <a href="{{ route('tenant.projects.edit', ['tenant' => tenant('id'), 'project' => $project]) }}" class="text-yellow-500 hover:text-yellow-700">
+                                                <a href="{{ route('tenant.projects.edit', ['tenant' => getTenantId(), 'project' => $project]) }}" class="text-yellow-500 hover:text-yellow-700">
                                                     {{ __('Edit') }}
                                                 </a>
-                                                <form action="{{ route('tenant.projects.destroy', ['tenant' => tenant('id'), 'project' => $project]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                                <form action="{{ route('tenant.projects.destroy', ['tenant' => getTenantId(), 'project' => $project]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this project?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-500 hover:text-red-700">

@@ -24,7 +24,7 @@ class ProjectController extends Controller
      */
     public function index(): View
     {
-        $projects = Project::get();
+        $projects = Project::get()->withRelationshipAutoloading();
 
         return view('tenant.projects.index', compact('projects'));
     }
@@ -45,7 +45,7 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request, CreateProject $createProject): RedirectResponse
     {
-        $createProject->handle(tenant('id'), $request->validated());
+        $createProject->handle($request->validated());
 
         return redirect()->route('tenant.projects.index', ['tenant' => tenant('id')])
             ->with('success', 'Project created successfully.');
@@ -92,7 +92,7 @@ class ProjectController extends Controller
      */
     public function destroy(Request $request, Project $project, DeleteProject $deleteProject): RedirectResponse
     {
-        $request->user()->authorize('delete', $project);
+        $request->user()->can('delete', $project);
 
         $deleteProject->handle($project);
 
